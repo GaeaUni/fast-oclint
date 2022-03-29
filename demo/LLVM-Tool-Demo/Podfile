@@ -1,0 +1,13 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'LLVM-Tool-Demo' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  # Pods for LLVM-Tool-Demo
+  pod 'YTKNetwork',:path=>'../YTKNetwork'
+end
+
+post_install do |installer|
+  # Put here the code to run once the project is installed.
+  puts `python3 ../../script/precommit_installer.py`
+end

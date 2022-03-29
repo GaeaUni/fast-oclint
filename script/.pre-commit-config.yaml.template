@@ -1,0 +1,10 @@
+fail_fast: false
+repos:
+  - repo: local
+    hooks:
+      - id: local-run-pre-commit
+        name: oclint
+        language: system
+        entry: sh {0}/hooks/fast-oclint.sh
+        pass_filenames: false
+        files: '^.*\.(h|cpp|cc|m|mm)'
