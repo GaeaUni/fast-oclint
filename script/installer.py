@@ -6,13 +6,14 @@ def install_brew(module_name):
     cmd = "which {0}".format(module_name)
     result = subprocess.run(cmd.split(), encoding='utf-8').returncode
     if result == 0:
-        return
+        return True
     # brew install module_name
     cmd = "brew install {0}".format(module_name)
     result = subprocess.run(cmd.split(), encoding='utf-8').returncode
     if result != 0:
         print("brew install {0} failed".format(module_name))
         assert False
+    return False
 
 
 def install_python_module(module_name):

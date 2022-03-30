@@ -10,7 +10,18 @@ class CommitFilesLinter:
         self.install()
 
     def install(self):
-        installer.install_brew("oclint")
+        exists = installer.install_brew("oclint")
+        if not exists:
+            print("请输入sudo密码，用于oclint签名")
+            path = subprocess.check_output("which oclint".split(), encoding='utf-8').replace("\n", "")
+            cmd = "sudo xattr -rd com.apple.quarantine {0}".format(path)
+            subprocess.run(cmd.split(), encoding='utf-8')
+            real_folder = os.path.dirname(os.path.dirname(os.readlink(path)))
+            result = os.popen("find {0} -name '*.dylib' ".format(real_folder)).read()
+            for dylib in result.split("\n"):
+                if dylib:
+                    cmd = "sudo xattr -rd com.apple.quarantine {0}".format(dylib)
+                    subprocess.run(cmd.split(), encoding='utf-8')
         installer.install_python_module("bs4")
 
     def process(self, commit_diffs=None):

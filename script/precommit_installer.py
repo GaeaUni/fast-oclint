@@ -8,6 +8,16 @@ class PrecommitInstaller:
     def __init__(self):
         self.install_precommit()
         self.install_git_config_hook()
+        self.install_xcode_select()
+
+    def install_xcode_select(self):
+        result = subprocess.run("xcode-select -v".split(), encoding='utf-8').returncode
+        if result != 0:
+            xcode_select_path = "/Library/Developer/CommandLineTools"
+            if os.path.isdir(xcode_select_path):
+                subprocess.run("xcode-select --reset".split(), encoding='utf-8')
+            else:
+                subprocess.run("xcode-select --install".split(), encoding='utf-8')
 
     def install_git_config_hook(self):
         os.system("git config --global init.templateDir ~/.git-template")
