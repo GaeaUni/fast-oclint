@@ -9,9 +9,15 @@ class CommitFilesLinter:
     def __init__(self):
         self.install()
 
+    def has_oclint_privilege(self):
+        path = subprocess.check_output("which oclint".split(), encoding='utf-8').replace("\n", "")
+        cmd = "xattr {0}".format(path)
+        result = subprocess.check_output(cmd.split(), encoding='utf-8').replace("\n", "")
+        return "com.apple.quarantine" not in result
+
     def install(self):
-        exists = installer.install_brew("oclint")
-        if not exists:
+        installer.install_brew("oclint")
+        if not self.has_oclint_privilege():
             print("请输入sudo密码，用于oclint签名")
             path = subprocess.check_output("which oclint".split(), encoding='utf-8').replace("\n", "")
             cmd = "sudo xattr -rd com.apple.quarantine {0}".format(path)
